@@ -9,7 +9,6 @@ Both are implemented using K's `Int`.
 
 ```k
 requires "krypto.k"
-
 module EVM-DATA
     imports KRYPTO
     imports STRING-BUFFER
@@ -627,7 +626,7 @@ We are using the polymorphic `Map` sort for these word maps.
     syntax Map ::= Map "[" Int ":=" WordStack "]" [function]
  // --------------------------------------------------------
     rule WM[ N := .WordStack ] => WM
-    rule WM[ N := W : WS     ] => (WM[N <- W])[N +Int 1 := WS]
+    rule WM[ N := W : WS     ] => (WM[N <- W])[N +Int 1 := WS] [concrete]
 
     syntax Map ::= #asMapWordStack ( WordStack ) [function]
  // -------------------------------------------------------
@@ -640,7 +639,7 @@ We are using the polymorphic `Map` sort for these word maps.
     syntax WordStack ::= #range ( Map , Int , Int )            [function]
     syntax WordStack ::= #range ( Map , Int , Int , WordStack) [function, klabel(#rangeAux)]
  // ----------------------------------------------------------------------------------------
-    rule #range(WM, START, WIDTH) => #range(WM, START +Int WIDTH -Int 1, WIDTH, .WordStack)
+    rule #range(WM, START, WIDTH) => #range(WM, START +Int WIDTH -Int 1, WIDTH, .WordStack) [concrete]
 ```
 
 ```{.k .concrete}
@@ -671,8 +670,8 @@ We are using the polymorphic `Map` sort for these word maps.
 ```k
     syntax Int ::= #lookup ( Map , Int ) [function]
  // -----------------------------------------------
-    rule #lookup( (KEY |-> VAL) M, KEY ) => VAL
-    rule #lookup(               M, KEY ) => 0 requires notBool KEY in_keys(M)
+    rule #lookup( (KEY |-> VAL) M, KEY ) => VAL                               [concrete]
+    rule #lookup(               M, KEY ) => 0 requires notBool KEY in_keys(M) [concrete]
 ```
 
 Parsing/Unparsing
