@@ -62,7 +62,7 @@ run_proof() {
         haskell)      args=()                                                                        ;;
         haskell-perf) args=(--haskell-backend-command "kore-exec +RTS -p -h -RTS") ; backend=haskell ;;
     esac
-    kprove --directory "$backend_dir" "$proof_file" --def-module VERIFICATION "${args[@]-}" "$@"
+    kprove --directory "$backend_dir" "$proof_file" "${args[@]-}" "$@"
 }
 
 run_klab() {
@@ -128,7 +128,7 @@ run_test() {
 
     case "$test_file" in
         *proofs/*)
-            run_proof "$test_file" "$@"
+            run_proof "$test_file" --def-module VERIFICATION "$@"
             ;;
         *interactive/*)
             run_krun "$test_file" "$@" > "$output_file" \
